@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>90s NIGHT — VHS MIX</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;min-height:100vh;color:#fff;font-family:Arial,Helvetica,sans-serif;
+  background:
+    radial-gradient(circle at 50% 10%,#ff00b733,transparent 35%),
+    radial-gradient(circle at 10% 90%,#00eaff22,transparent 30%),#08000f;
+}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;
+background:repeating-linear-gradient(0deg,transparent 0 3px,#ffffff0d 3px 4px);mix-blend-mode:screen}
+.wrap{width:min(1180px,94%);margin:auto;padding:28px 0 50px}
+header{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:22px}
+.logo{font-size:clamp(30px,5vw,60px);font-weight:900;letter-spacing:5px;text-shadow:4px 4px #ff00b7,-2px -2px #00eaff}
+.badge{font:700 12px monospace;color:#00eaff;border:2px solid #00eaff;padding:9px 12px}
+.grid{display:grid;grid-template-columns:390px 1fr;gap:22px}
+.panel{background:#0d0614eF;border:2px solid #ff00b7;border-radius:16px;padding:18px;box-shadow:0 0 35px #ff00b733}
+.cover{width:100%;aspect-ratio:1;object-fit:cover;border:3px solid #00eaff;border-radius:10px;box-shadow:0 0 25px #00eaff55}
+.kicker{font:700 12px monospace;color:#00eaff;letter-spacing:3px;margin-top:14px}
+.title{font-size:24px;font-weight:900;margin:5px 0}.artist{color:#ff7bd6}
+.deck{margin-top:16px;background:#151515;border:4px solid #555;border-radius:10px;padding:15px;box-shadow:inset 0 0 0 3px #222,0 8px 25px #000}
+.cassette{height:120px;position:relative;background:linear-gradient(#292929,#111);border:2px solid #777;border-radius:7px;overflow:hidden}
+.cassette:after{content:"";position:absolute;left:50%;top:50%;width:155px;height:48px;transform:translate(-50%,-50%);background:#111;border:2px solid #777;clip-path:polygon(8% 0,92% 0,100% 100%,0 100%)}
+.reel{position:absolute;top:28px;width:62px;height:62px;border-radius:50%;background:repeating-conic-gradient(#ddd 0 8deg,#555 8deg 16deg);border:7px solid #999;z-index:2}
+.reel:after{content:"";position:absolute;inset:20px;border-radius:50%;background:#111;border:3px solid #aaa}
+.r1{left:45px}.r2{right:45px}
+.playing .reel{animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.lcd{margin-top:12px;background:#071008;color:#62ff62;border:3px solid #444;padding:10px;font:700 16px monospace;display:flex;justify-content:space-between;gap:8px;box-shadow:inset 0 0 14px #62ff6233}
+.eq{height:72px;display:flex;align-items:end;justify-content:center;gap:4px;margin:10px 0}
+.eq i{display:block;width:7px;height:15%;background:#00eaff;box-shadow:0 0 8px #00eaff}
+.playing .eq i{animation:eq .5s infinite ease-in-out alternate}
+.eq i:nth-child(2n){animation-delay:.12s}.eq i:nth-child(3n){animation-delay:.22s}.eq i:nth-child(4n){animation-delay:.34s}
+@keyframes eq{to{height:92%}}
+.controls{display:flex;justify-content:center;gap:8px}
+button{border:2px solid #00eaff;background:#0b0b13;color:#fff;padding:11px 14px;border-radius:7px;font-weight:900;cursor:pointer}
+button:hover{background:#00eaff;color:#08000f}
+.main{background:#ff00b7;border-color:#ff00b7}.main:hover{background:#fff;color:#ff00b7}
+.row{display:flex;align-items:center;gap:9px;margin-top:10px;font:12px monospace;color:#aaa}
+.row input{flex:1;accent-color:#ff00b7}
+.search{display:flex;margin-bottom:14px}
+.search input{width:100%;padding:13px;background:#07070b;border:2px solid #5b2b68;color:#fff;border-radius:7px;outline:none}
+.playlist{max-height:650px;overflow:auto;padding-right:4px}
+.track{display:grid;grid-template-columns:42px 1fr auto;gap:10px;align-items:center;padding:11px;border:1px solid #3b2141;margin-bottom:7px;border-radius:8px;background:#0d0712;cursor:pointer}
+.track:hover,.track.active{border-color:#00eaff;background:#111525}
+.num{font:700 14px monospace;color:#ff00b7;text-align:center}
+.tname{font-weight:900}.tartist{font-size:12px;color:#aaa;margin-top:3px}.mp3{font:11px monospace;color:#62ff62}
+.status{margin-top:12px;min-height:42px;padding:10px;border-left:3px solid #ff00b7;background:#160719;color:#ddd;font-size:13px;line-height:1.4}
+code{color:#62ff62}
+@media(max-width:850px){.grid{grid-template-columns:1fr}.panel:first-child{max-width:560px;margin:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="logo">90s NIGHT</div>
+  <div class="badge">VHS MIX • LOCAL MP3</div>
+</header>
+
+<div class="grid">
+<section class="panel">
+  <!-- Если твоя обложка называется иначе, поменяй только этот путь -->
+  <img class="cover" src="assets/cover.png" alt="90s Night">
+
+  <div class="kicker">NOW PLAYING</div>
+  <div id="title" class="title">Выберите трек</div>
+  <div id="artist" class="artist">90s NIGHT</div>
+
+  <div id="deck" class="deck">
+    <div class="cassette"><div class="reel r1"></div><div class="reel r2"></div></div>
+    <div class="lcd"><span id="lcdTitle">READY</span><span id="lcdTime">00:00</span></div>
+    <div class="eq" id="eq"></div>
+    <div class="controls">
+      <button onclick="prev()">⏮</button>
+      <button id="playBtn" class="main" onclick="toggle()">▶ PLAY</button>
+      <button onclick="next()">⏭</button>
+    </div>
+    <div class="row"><span id="cur">00:00</span><input id="progress" type="range" min="0" max="100" value="0"><span id="dur">00:00</span></div>
+    <div class="row"><span>VOL</span><input id="volume" type="range" min="0" max="1" step=".01" value=".8"></div>
+  </div>
+
+  <div id="status" class="status">
+    🎵 Музыка берётся прямо из папки <code>music/</code>. Никаких API.
+  </div>
+</section>
+
+<section class="panel">
+  <div class="search"><input id="search" placeholder="Поиск по плейлисту..." oninput="render()"></div>
+  <div id="playlist" class="playlist"></div>
+</section>
+</div>
+</div>
+
+<audio id="audio" preload="metadata"></audio>
+
+<script>
+/*
+==========================================================
+ТВОЙ ПЛЕЙЛИСТ
+Файлы должны лежать в папке music/
+Названия file должны совпадать с именами файлов.
+==========================================================
+*/
+const tracks = [
+  {title:"No Limit", artist:"2 Unlimited", file:"music/2 Unlimited - No Limit.mp3"},
+  {title:"Музыка нас связала (Полная версия)", artist:"Мираж", file:"music/Мираж - Музыка нас связала (Полная версия).mp3"},
+  {title:"Ночь", artist:"Мираж", file:"music/Мираж - Ночь.mp3"},
+  {title:"All That She Wants", artist:"Ace of Base", file:"music/Ace of Base - All That She Wants.mp3"},
+  {title:"Everybody (Backstreet's Back)", artist:"Backstreet Boys", file:"music/Backstreet Boys - Everybody (Backstreet's Back).mp3"},
+  {title:"The Rhythm Of The Night", artist:"Corona", file:"music/Corona - The Rhythm Of The Night.mp3"},
+  {title:"It's My Life", artist:"Dr. Alban", file:"music/Dr. Alban - It's My Life.mp3"},
+  {title:"Set The World On Fire", artist:"E-Type", file:"music/E-Type - Set The World On Fire.mp3"},
+  {title:"What Is Love", artist:"Haddaway", file:"music/Haddaway - What Is Love.mp3"},
+  {title:"Rhythm Is A Dancer", artist:"Snap!", file:"music/Snap! - Rhythm Is A Dancer.mp3"}
+];
+
+let index=0;
+const audio=document.getElementById("audio");
+const deck=document.getElementById("deck");
+const progress=document.getElementById("progress");
+const volume=document.getElementById("volume");
+const status=document.getElementById("status");
+const playBtn=document.getElementById("playBtn");
+
+for(let i=0;i<24;i++){const b=document.createElement("i");document.getElementById("eq").appendChild(b)}
+
+function esc(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function fmt(s){if(!isFinite(s))return"00:00";s=Math.floor(s);return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")}
+
+function render(){
+  const q=document.getElementById("search").value.toLowerCase();
+  const box=document.getElementById("playlist");box.innerHTML="";
+  tracks.forEach((t,i)=>{
+    if((t.title+" "+t.artist).toLowerCase().includes(q)){
+      const el=document.createElement("div");
+      el.className="track"+(i===index?" active":"");
+      el.innerHTML=`<div class="num">${String(i+1).padStart(2,"0")}</div>
+      <div><div class="tname">${esc(t.title)}</div><div class="tartist">${esc(t.artist)}</div></div>
+      <div class="mp3">MP3</div>`;
+      el.onclick=()=>load(i,true);box.appendChild(el);
+    }
+  });
+}
+
+function load(i,autoplay=false){
+  index=(i+tracks.length)%tracks.length;
+  const t=tracks[index];
+  document.getElementById("title").textContent=t.title;
+  document.getElementById("artist").textContent=t.artist;
+  document.getElementById("lcdTitle").textContent=t.title.toUpperCase();
+  document.getElementById("lcdTime").textContent="00:00";
+  progress.value=0;
+  audio.src=t.file;
+  status.innerHTML="🎵 Файл: <code>"+esc(t.file)+"</code>";
+  render();
+  if(autoplay){
+    audio.play().catch(()=>{
+      deck.classList.remove("playing");playBtn.textContent="▶ PLAY";
+      status.innerHTML="❌ Не удалось открыть <code>"+esc(t.file)+"</code>.<br>Проверьте точное имя файла в папке music/.";
+    });
+  }
+}
+
+function toggle(){
+  if(!audio.src)load(0,false);
+  if(audio.paused){
+    audio.play().then(()=>{deck.classList.add("playing");playBtn.textContent="⏸ PAUSE"})
+    .catch(()=>status.innerHTML="❌ Файл не найден. Проверьте папку <code>music/</code> и имя MP3.");
+  }else audio.pause();
+}
+function next(){load(index+1,true)}
+function prev(){load(index-1,true)}
+
+audio.addEventListener("play",()=>{deck.classList.add("playing");playBtn.textContent="⏸ PAUSE"});
+audio.addEventListener("pause",()=>{deck.classList.remove("playing");playBtn.textContent="▶ PLAY"});
+audio.addEventListener("loadedmetadata",()=>{document.getElementById("dur").textContent=fmt(audio.duration)});
+audio.addEventListener("timeupdate",()=>{
+  progress.value=audio.duration?(audio.currentTime/audio.duration)*100:0;
+  document.getElementById("cur").textContent=fmt(audio.currentTime);
+  document.getElementById("lcdTime").textContent=fmt(audio.currentTime);
+});
+audio.addEventListener("ended",next);
+audio.addEventListener("error",()=>{deck.classList.remove("playing");playBtn.textContent="▶ PLAY";status.innerHTML="❌ <b>Ошибка файла.</b> Проверьте имя MP3 и расширение .mp3."});
+progress.addEventListener("input",()=>{if(audio.duration)audio.currentTime=(progress.value/100)*audio.duration});
+volume.addEventListener("input",()=>audio.volume=volume.value);
+audio.volume=.8;
+
+load(0,false);
+render();
+</script>
+</body>
+</html>
